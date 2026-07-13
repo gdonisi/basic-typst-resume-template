@@ -1,21 +1,19 @@
-#import "@preview/scienceicons:0.1.0": orcid-icon
+#import "@preview/scienceicons:0.1.0": github-icon, linkedin-icon
 
 #let resume(
   author: "",
-  author-position: left,
-  personal-info-position: left,
-  pronouns: "",
+  author-position: center,
+  personal-info-position: center,
   location: "",
   email: "",
   github: "",
   linkedin: "",
   phone: "",
   personal-site: "",
-  orcid: "",
-  accent-color: "#000000",
+  accent-color: "#023e8a",
   font: "New Computer Modern",
-  paper: "us-letter",
-  author-font-size: 20pt,
+  paper: "a4",
+  author-font-size: 18pt,
   font-size: 10pt,
   lang: "en",
   body,
@@ -36,7 +34,7 @@
 
   // Reccomended to have 0.5in margin on all sides
   set page(
-    margin: (0.5in),
+    margin: 0.5in,
     paper: paper,
   )
 
@@ -73,10 +71,17 @@
   [= #(author)]
 
   // Personal Info Helper
-  let contact-item(value, prefix: "", link-type: "") = {
+  let contact-item(value, link-prefix: "", icon: "") = {
     if value != "" {
-      if link-type != "" {
-        link(link-type + value)[#(prefix + value)]
+      if link-prefix != "" {
+        if icon == "github" {
+          github-icon(color: rgb("#000")) + sym.space.nobreak
+        }
+        if icon == "linkedin" {
+          linkedin-icon(color: rgb("#0a66c2")) + sym.space.nobreak
+        }
+
+        link(link-prefix + value)[#(value)]
       } else {
         value
       }
@@ -89,14 +94,12 @@
     align(personal-info-position)[
       #{
         let items = (
-          contact-item(pronouns),
-          contact-item(phone, link-type: "tel:"),
           contact-item(location),
-          contact-item(email, link-type: "mailto:"),
-          contact-item(github, link-type: "https://"),
-          contact-item(linkedin, link-type: "https://"),
-          contact-item(personal-site, link-type: "https://"),
-          contact-item(orcid, prefix: [#orcid-icon(color: rgb("#AECD54"))orcid.org/], link-type: "https://orcid.org/"),
+          contact-item(phone, link-prefix: "tel:"),
+          contact-item(email, link-prefix: "mailto:"),
+          contact-item(github, link-prefix: "https://github.com/", icon: "github"),
+          contact-item(linkedin, link-prefix: "https://www.linkedin.com/in/", icon: "linkedin"),
+          contact-item(personal-site, link-prefix: "https://"),
         )
         items.filter(x => x != none).join("  |  ")
       }
@@ -139,8 +142,10 @@
 ) = {
   if start-date == "" {
     end-date
+  } else if end-date == "" {
+    start-date + " " + sym.dash.en + " Present"
   } else {
-    start-date + " " + sym.dash.em + " " + end-date
+    start-date + " " + sym.dash.en + " " + end-date
   }
 }
 
@@ -149,7 +154,6 @@
   institution: "",
   dates: "",
   degree: "",
-  gpa: "",
   location: "",
   // Makes dates on upper right like rest of components
   consistent: false,
