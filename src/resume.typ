@@ -81,7 +81,12 @@
           linkedin-icon(color: rgb("#0a66c2")) + sym.space.nobreak
         }
 
-        link(link-prefix + value)[#(value)]
+        // Remove spaces from phone link
+        if link-prefix == "tel:" {
+          link(link-prefix + value.replace(" ", ""))[#(value)]
+        } else {
+          link(link-prefix + value)[#(value)]
+        }
       } else {
         value
       }
